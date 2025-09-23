@@ -11,6 +11,7 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HakAksesController;
+use App\Http\Controllers\AuthController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,10 @@ Route::resource('role', RoleController::class);
 Route::resource('menu', MenuController::class);
 Route::resource('hak_akses', HakAksesController::class);
 Route::get('/form1', [Form1Controller::class, 'index'])->name('form1.index');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+;
 //Route::put('/formulir1/update', 'Formulir1Controller@update')->name('formulir1.update');
 // routes/web.php
 // Route::get('/formulir1', [MakulController::class, 'showForm'])->name('formulir1.index');
