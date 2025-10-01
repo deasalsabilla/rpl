@@ -34,4 +34,10 @@ class Menu extends Model
     {
         return $this->belongsTo(Menu::class, 'parent_id');
     }
+
+    // Relasi ke hak akses
+    public function hakAkses()
+    {
+        return $this->hasMany(\App\Models\HakAkses::class, 'menu_id');
+    }
 }

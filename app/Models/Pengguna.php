@@ -22,12 +22,11 @@ class Pengguna extends Authenticatable
         'password',
         'remember_token',
     ];
-    
 
- public function roleData()
+
+    // App\Models\User.php
+    public function role()
     {
         return $this->belongsTo(Role::class, 'role');
     }
-
 }
-

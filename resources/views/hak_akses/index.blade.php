@@ -71,7 +71,7 @@
                                 $akses = ($role->hakAkses ?? collect())->firstWhere('menu_id', $menu->id);
                                 @endphp
                                 <tr>
-                                    <td>{{ $menu->nama }}</td>
+                                    <td style="padding-left: 0px">{{ $menu->nama }}</td>
                                     <td>
                                         <input type="hidden" name="akses[{{ $menu->id }}][can_view]" value="0">
                                         <div class="form-check form-switch">
@@ -105,8 +105,53 @@
                                         </div>
                                     </td>
                                 </tr>
+
+                                {{-- Loop anak (children) --}}
+                                @if ($menu->children)
+                                @foreach ($menu->children as $child)
+                                @php
+                                $aksesChild = ($role->hakAkses ?? collect())->firstWhere('menu_id', $child->id);
+                                @endphp
+                                <tr>
+                                    <td style="padding-left: 20px">{{ $child->nama }}</td>
+                                    <td>
+                                        <input type="hidden" name="akses[{{ $child->id }}][can_view]" value="0">
+                                        <div class="form-check form-switch">
+                                            <input type="checkbox" class="form-check-input switch-{{ $role->id }}"
+                                                name="akses[{{ $child->id }}][can_view]" value="1"
+                                                @if(optional($aksesChild)->can_view) checked @endif>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="akses[{{ $child->id }}][can_create]" value="0">
+                                        <div class="form-check form-switch">
+                                            <input type="checkbox" class="form-check-input switch-{{ $role->id }}"
+                                                name="akses[{{ $child->id }}][can_create]" value="1"
+                                                @if(optional($aksesChild)->can_create) checked @endif>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="akses[{{ $child->id }}][can_edit]" value="0">
+                                        <div class="form-check form-switch">
+                                            <input type="checkbox" class="form-check-input switch-{{ $role->id }}"
+                                                name="akses[{{ $child->id }}][can_edit]" value="1"
+                                                @if(optional($aksesChild)->can_edit) checked @endif>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="akses[{{ $child->id }}][can_delete]" value="0">
+                                        <div class="form-check form-switch">
+                                            <input type="checkbox" class="form-check-input switch-{{ $role->id }}"
+                                                name="akses[{{ $child->id }}][can_delete]" value="1"
+                                                @if(optional($aksesChild)->can_delete) checked @endif>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                                @endif
                                 @endforeach
                             </tbody>
+
                         </table>
                     </div>
                     <div class="modal-footer">
@@ -122,9 +167,9 @@
 
     <script>
         // Event listener untuk tombol "Pilih Semua"
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".pilih-semua").forEach(function (btn) {
-                btn.addEventListener("click", function () {
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".pilih-semua").forEach(function(btn) {
+                btn.addEventListener("click", function() {
                     const roleId = this.getAttribute("data-role");
                     const switches = document.querySelectorAll(".switch-" + roleId);
                     switches.forEach(chk => chk.checked = true);

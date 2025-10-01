@@ -12,8 +12,11 @@ class HakAksesController extends Controller
 {
     public function index()
     {
+        // Ambil semua role beserta hak akses yang dimiliki
         $roles = Role::with('hakAkses')->orderBy('id')->get();
-        $menus = Menu::orderBy('urutan')->get();
+
+        // Ambil semua menu (parent + child) agar bisa diatur di modal hak akses
+        $menus = Menu::with('children')->orderBy('urutan')->get();
 
         return view('hak_akses.index', compact('roles', 'menus'));
     }
