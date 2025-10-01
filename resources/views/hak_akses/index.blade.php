@@ -18,7 +18,6 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $role->nama }}</td>
                             <td>
-                                <!-- Tombol untuk membuka modal Hak Akses -->
                                 <button type="button" class="btn btn-sm btn-info"
                                     data-bs-toggle="modal"
                                     data-bs-target="#modalHakAkses{{ $role->id }}">
@@ -33,7 +32,7 @@
         </div>
     </div>
 
-    <!-- Taruh semua modal DI LUAR tabel -->
+    <!-- Taruh semua modal di luar tabel -->
     @foreach ($roles as $role)
     <div class="modal fade" id="modalHakAkses{{ $role->id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -47,6 +46,15 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+
+                        <!-- Tombol pilih semua -->
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-sm btn-success pilih-semua"
+                                data-role="{{ $role->id }}">
+                                <i class="bi bi-check2-all"></i> Pilih Semua
+                            </button>
+                        </div>
+
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
@@ -67,7 +75,7 @@
                                     <td>
                                         <input type="hidden" name="akses[{{ $menu->id }}][can_view]" value="0">
                                         <div class="form-check form-switch">
-                                            <input type="checkbox" class="form-check-input"
+                                            <input type="checkbox" class="form-check-input switch-{{ $role->id }}"
                                                 name="akses[{{ $menu->id }}][can_view]" value="1"
                                                 @if(optional($akses)->can_view) checked @endif>
                                         </div>
@@ -75,7 +83,7 @@
                                     <td>
                                         <input type="hidden" name="akses[{{ $menu->id }}][can_create]" value="0">
                                         <div class="form-check form-switch">
-                                            <input type="checkbox" class="form-check-input"
+                                            <input type="checkbox" class="form-check-input switch-{{ $role->id }}"
                                                 name="akses[{{ $menu->id }}][can_create]" value="1"
                                                 @if(optional($akses)->can_create) checked @endif>
                                         </div>
@@ -83,7 +91,7 @@
                                     <td>
                                         <input type="hidden" name="akses[{{ $menu->id }}][can_edit]" value="0">
                                         <div class="form-check form-switch">
-                                            <input type="checkbox" class="form-check-input"
+                                            <input type="checkbox" class="form-check-input switch-{{ $role->id }}"
                                                 name="akses[{{ $menu->id }}][can_edit]" value="1"
                                                 @if(optional($akses)->can_edit) checked @endif>
                                         </div>
@@ -91,7 +99,7 @@
                                     <td>
                                         <input type="hidden" name="akses[{{ $menu->id }}][can_delete]" value="0">
                                         <div class="form-check form-switch">
-                                            <input type="checkbox" class="form-check-input"
+                                            <input type="checkbox" class="form-check-input switch-{{ $role->id }}"
                                                 name="akses[{{ $menu->id }}][can_delete]" value="1"
                                                 @if(optional($akses)->can_delete) checked @endif>
                                         </div>
@@ -111,4 +119,17 @@
         </div>
     </div>
     @endforeach
+
+    <script>
+        // Event listener untuk tombol "Pilih Semua"
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".pilih-semua").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    const roleId = this.getAttribute("data-role");
+                    const switches = document.querySelectorAll(".switch-" + roleId);
+                    switches.forEach(chk => chk.checked = true);
+                });
+            });
+        });
+    </script>
 </x-layout>
