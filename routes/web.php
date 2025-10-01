@@ -45,7 +45,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('pengguna', PenggunaController::class);
     Route::resource('role', RoleController::class);
     Route::resource('menu', MenuController::class);
-    Route::resource('hak_akses', HakAksesController::class);
+    Route::resource('hak_akses', HakAksesController::class)->only(['index', 'update']);
+
 
     Route::get('/form1', [Form1Controller::class, 'index'])->name('form1.index');
 });
