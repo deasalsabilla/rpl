@@ -12,44 +12,40 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\HakAksesController;
 use App\Http\Controllers\AuthController;
-
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home');
+/*
+|--------------------------------------------------------------------------
+| Route untuk autentikasi
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
 
-//route controller pendaftar
-Route::resource('pendaftars', PendaftarController::class);
-Route::resource('prodis', ProdiController::class);
-Route::resource('asesors', AsesorController::class);
-Route::resource('cpmks', CpmkController::class);
-Route::resource('makuls', MakulController::class);
-Route::resource('tahun_akademiks', TahunAkademikController::class);
-Route::resource('pengguna', PenggunaController::class);
-Route::resource('role', RoleController::class);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-Route::resource('menu', MenuController::class);
-Route::resource('hak_akses', HakAksesController::class);
-Route::get('/form1', [Form1Controller::class, 'index'])->name('form1.index');
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-;
-//Route::put('/formulir1/update', 'Formulir1Controller@update')->name('formulir1.update');
-// routes/web.php
-// Route::get('/formulir1', [MakulController::class, 'showForm'])->name('formulir1.index');
-// Route::put('/formulir1/update', [MakulController::class, 'filtermakul'])->name('formulir1.update');
+/*
+|--------------------------------------------------------------------------
+| Route yang hanya bisa diakses setelah login
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return view('home');
+    });
+    Route::resource('pendaftars', PendaftarController::class);
+    Route::resource('prodis', ProdiController::class);
+    Route::resource('asesors', AsesorController::class);
+    Route::resource('cpmks', CpmkController::class);
+    Route::resource('makuls', MakulController::class);
+    Route::resource('tahun_akademiks', TahunAkademikController::class);
+    Route::resource('pengguna', PenggunaController::class);
+    Route::resource('role', RoleController::class);
+    Route::resource('menu', MenuController::class);
+    Route::resource('hak_akses', HakAksesController::class);
 
-// Route::get('/form/{prodis_id}', [MakulController::class, 'showForm'])->name('formulir1/index');
-// Route::post('/form/{prodis_id}/filter', [MakulController::class, 'filterMataKuliah'])->name('formulir1.filter');
-
-// Route::get('/pendaftar/home', [PendaftarController::class, 'home'])->name('pendaftars.home');
-
-// Route::get('pendaftar/home', function () {
-//     return view('pendaftar_home');
-// });
-// Route::get('/pendaftar/home', [PendaftarController::class, 'index'])->name('pendaftars.index');
-// Route::get('/pendaftar/create', [PendaftarController::class, 'create'])->name('pendaftars.create');
-// Route::get('/pendaftar/edit', [PendaftarController::class, 'edit'])->name('pendaftars.edit');
-// Route::resource('prodis', ProdiController::class);
+    Route::get('/form1', [Form1Controller::class, 'index'])->name('form1.index');
+});
