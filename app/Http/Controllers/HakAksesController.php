@@ -12,7 +12,7 @@ class HakAksesController extends Controller
 {
     public function index()
     {
-        $roles = Role::with('hakAkses')->orderBy('nama')->get();
+        $roles = Role::with('hakAkses')->orderBy('id')->get();
         $menus = Menu::orderBy('urutan')->get();
 
         return view('hak_akses.index', compact('roles', 'menus'));
